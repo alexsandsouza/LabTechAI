@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, Lock, X, Globe, Code2, ArrowRight, UserPlus, LogIn, ShieldCheck, KeyRound, ArrowLeft } from 'lucide-react';
+import { Mail, Lock, X, Globe, Code2, ArrowRight, UserPlus, LogIn, ShieldCheck, ArrowLeft } from 'lucide-react';
 
 type AuthView = 'login' | 'signup' | 'forgot';
 

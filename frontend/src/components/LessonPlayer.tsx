@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
-import { ChevronLeft, PlayCircle, MessageCircle, CheckCircle2, Users, ChevronDown, BookText, Code2, Bell, MessageSquareMore, GitCompare, Spline, Cog } from 'lucide-react';
+import { ChevronLeft, PlayCircle, MessageCircle, CheckCircle2, Users, ChevronDown, BookText, Code2, Cog } from 'lucide-react';
 
 const LessonPlayer = ({ onClose }: { onClose: () => void }) => {
   const [expandedPhase, setExpandedPhase] = useState<string | null>('f2-7');

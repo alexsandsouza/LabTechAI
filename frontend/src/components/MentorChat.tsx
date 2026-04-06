@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageSquare, X, Bot, CornerDownLeft } from 'lucide-react';
+import { X, CornerDownLeft } from 'lucide-react';
 
 // --- Sound Engine (Synthesized) ---
 const playSound = (freq: number, type: OscillatorType = 'sine', duration = 0.1) => {

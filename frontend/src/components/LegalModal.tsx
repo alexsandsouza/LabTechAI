@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Shield, Scale, ScrollText, CheckCircle2, Mail, Lock } from 'lucide-react';
+import { X, Shield, Scale, ScrollText, CheckCircle2, Lock } from 'lucide-react';
 
 interface LegalModalProps {
   type: 'terms' | 'privacy';
