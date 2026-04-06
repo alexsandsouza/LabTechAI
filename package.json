@@ -1,0 +1,19 @@
+{
+  "name": "project",
+  "version": "1.0.0",
+  "description": "A **LabTechAI** foi construída como uma plataforma \"EDTECH PREMIUM\", focada em micro-interações, gamificação profunda e uma interface SaaS moderna (Dark Mode & Glassmorphism).",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^2.2.2",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "nedb-promises": "^6.2.3"
+  }
+}

@@ -1,0 +1,110 @@
+/* LabTechAI - Master Designer Identity (Vercel Style) v6.0 */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+
+:root {
+    /* Master Palette - Stripe/Vercel/Linear Inspired */
+    --primary: #7C3AED;        /* Indigo-600 */
+    --secondary: #2563EB;      /* Blue-600 */
+    --accent: #22C55E;         /* Green-500 */
+    --brand: var(--primary);
+    --cyan: var(--secondary);
+    
+    --success: var(--accent);
+    --gold: #F59E0B;
+    --danger: #EF4444;
+    
+    /* Typography */
+    --font-display: 'Inter', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-code: 'JetBrains Mono', monospace;
+
+    /* Base - Light Theme (Standard SaaS) - Primary Identity */
+    --bg-primary: #FFFFFF;
+    --bg-card: #F8FAFC;         /* Slate-50 */
+    --bg-card2: #F1F5F9;        /* Slate-100 */
+    --text-primary: #0F172A;    /* Slate-900 */
+    --text-secondary: #64748B;  /* Slate-500 */
+    --border: #E2E8F0;          /* Slate-200 */
+    --surface: rgba(124, 58, 237, 0.04);
+    --glass: rgba(255, 255, 255, 0.85);
+    --glass-border: rgba(124, 58, 237, 0.1);
+}
+
+/* Dark Theme (Pro Midnight) */
+html.dark {
+    --bg-primary: #0F172A;      /* Slate-900 */
+    --bg-card: #1E293B;         /* Slate-800 */
+    --bg-card2: #334155;
+    --text-primary: #F1F5F9;
+    --text-secondary: #94A3B8;
+    --border: #334155;
+    --surface: rgba(255, 255, 255, 0.03);
+    --glass: rgba(15, 23, 42, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+/* Global Transition */
+* {
+    font-family: var(--font-body);
+}
+
+.gradient-brand {
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+}
+
+.shadow-soft {
+    box-shadow: 0 10px 25px rgba(124, 58, 237, 0.1);
+}
+
+.shadow-hover {
+    box-shadow: 0 15px 30px rgba(124, 58, 237, 0.15);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  line-height: 1.5;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  transition: transform var(--transition-normal), border var(--transition-normal), background var(--transition-normal);
+}
+
+.glass-card:hover {
+  transform: translateY(-5px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-tertiary);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-color);
+}

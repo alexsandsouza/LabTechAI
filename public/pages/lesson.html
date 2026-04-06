@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula | LabTechAI</title>
+    
+    <!-- Meta Tags SEO -->
+    <meta name="description" content="Aprenda com lições interativas, slides visuais e conceitos práticos na LabTechAI.">
+    
+    <!-- Fonts & Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../styles/variables.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    
+    <style>
+        .lesson-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 40px;
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            gap: 30px;
+            position: relative;
+        }
+
+        .slide-icon {
+            font-size: 80px;
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 15px rgba(0, 229, 255, 0.4));
+        }
+
+        .slide-content h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff, #b0b3c8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .slide-content p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .code-example-container {
+            width: 100%;
+            background: #0d0e22;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: left;
+            border: 1px solid var(--glass-border);
+            margin-top: 30px;
+            position: relative;
+        }
+
+        .code-example {
+            font-family: 'Fira Code', 'Courier New', monospace;
+            color: var(--secondary-color);
+            font-size: 1.1rem;
+            white-space: pre-wrap;
+        }
+
+        .lesson-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-top: 50px;
+        }
+
+        .progress-indicator {
+            display: flex;
+            gap: 10px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: var(--primary-color);
+            box-shadow: 0 0 10px var(--primary-color);
+            transform: scale(1.2);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .lesson-container { padding: 20px; }
+            .slide-content h1 { font-size: 1.8rem; }
+            .slide-content p { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body class="bg-primary">
+
+    <header class="navbar">
+        <div class="logo-container">
+            <a href="../index.html" class="logo-text" style="text-decoration: none;">LabTechAI</a>
+        </div>
+        <div class="nav-stats" id="nav-stats">
+            <!-- Stats will be updated via JS -->
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div id="lesson-module-info" class="text-muted" style="text-align: center; margin-bottom: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px;"></div>
+        
+        <div id="slide-wrapper" class="glass-card lesson-container animate-fade">
+            <!-- Slide content will be injected here -->
+        </div>
+
+        <div class="lesson-controls">
+            <button id="btn-prev" class="btn btn-ghost" style="visibility: hidden;">
+                <i class="fa-solid fa-arrow-left"></i> Anterior
+            </button>
+            <div id="progress-dots" class="progress-indicator"></div>
+            <button id="btn-next" class="btn btn-primary">
+                Próximo <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="../scripts/state.js"></script>
+    <script src="../scripts/courses.js"></script>
+    <script src="../scripts/ui-utils.js"></script>
+    <script src="../scripts/app.js"></script>
+    <script src="../components/mentor-chat.js"></script>
+
+    <script>
+        // Lesson Logic
+        let currentSlide = 0;
+        let lessonData = null;
+        let lessonId = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            lessonId = params.get('id');
+            
+            // Search for lesson in all modules
+            const course = COURSE_DATA['logica-programacao'];
+            course.modules.forEach(m => {
+                const found = m.lessons.find(l => l.id === lessonId);
+                if (found) {
+                    lessonData = found;
+                    document.getElementById('lesson-module-info').textContent = m.title;
+                }
+            });
+
+            if (!lessonData) {
+                window.location.href = '../index.html';
+                return;
+            }
+
+            renderSlide();
+        });
+
+        function renderSlide() {
+            const slide = lessonData.content.slides[currentSlide];
+            const wrapper = document.getElementById('slide-wrapper');
+            const dots = document.getElementById('progress-dots');
+            
+            // Build slide HTML
+            wrapper.innerHTML = `
+                <div class="slide-icon">
+                    <i class="fa-solid ${getIconForSlide(slide.title)}"></i>
+                </div>
+                <div class="slide-content">
+                    <h1>${slide.title}</h1>
+                    <p>${slide.text}</p>
+                </div>
+                ${(currentSlide === lessonData.content.slides.length - 1 && lessonData.content.example) ? `
+                    <div class="code-example-container animate-fade">
+                        <div style="font-size: 12px; text-transform: uppercase; margin-bottom: 10px; color: var(--text-muted);">Exemplo Prático</div>
+                        <code class="code-example">${lessonData.content.example}</code>
+                    </div>
+                ` : ''}
+            `;
+
+            // Build dots
+            dots.innerHTML = lessonData.content.slides.map((_, idx) => `
+                <div class="dot ${idx === currentSlide ? 'active' : ''}"></div>
+            `).join('');
+
+            // Controls visibility
+            document.getElementById('btn-prev').style.visibility = currentSlide === 0 ? 'hidden' : 'visible';
+            document.getElementById('btn-next').innerHTML = currentSlide === lessonData.content.slides.length - 1 
+                ? 'Concluir Aula <i class="fa-solid fa-check"></i>' 
+                : 'Próximo <i class="fa-solid fa-arrow-right"></i>';
+
+            // Animation
+            wrapper.style.animation = 'none';
+            wrapper.offsetHeight; // force reflow
+            wrapper.style.animation = 'fadeInUp 0.6s ease forwards';
+        }
+
+        function getIconForSlide(title) {
+            if (title.toLowerCase().includes('gaveta')) return 'fa-inbox';
+            if (title.toLowerCase().includes('tipo')) return 'fa-cubes';
+            if (title.toLowerCase().includes('se')) return 'fa-code-branch';
+            if (title.toLowerCase().includes('item')) return 'fa-rotate-right';
+            if (title.toLowerCase().includes('fábrica')) return 'fa-industry';
+            return 'fa-lightbulb';
+        }
+
+        document.getElementById('btn-next').addEventListener('click', () => {
+            if (currentSlide < lessonData.content.slides.length - 1) {
+                currentSlide++;
+                renderSlide();
+                ui.playSound('click');
+            } else {
+                // Completed Lesson!
+                stateManager.completeLesson('logica-programacao', lessonId, lessonData.xp);
+                window.location.href = '../index.html?completed=' + lessonId;
+            }
+        });
+
+        document.getElementById('btn-prev').addEventListener('click', () => {
+            if (currentSlide > 0) {
+                currentSlide--;
+                renderSlide();
+                ui.playSound('click');
+            }
+        });
+    </script>
+</body>
+</html>

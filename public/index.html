@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LabTechAI | Master Developer Ecosystem</title>
+    
+    <!-- External Resources -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles/variables.css">
+    
+    <style>
+        /* --- Root & Premium UI/UX v26.0 --- */
+        :root {
+            --primary: #A78BFA;
+            --secondary: #38BDF8;
+            --bg-body: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --surface: #f8fafc;
+            --border: rgba(0,0,0,0.05);
+            --bg-glass: rgba(255, 255, 255, 0.8);
+        }
+
+        html.dark {
+            --bg-body: #0c0f1d;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --surface: #161a29;
+            --border: rgba(255,255,255,0.1);
+            --bg-glass: rgba(15, 23, 42, 0.8);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+            background-image: 
+                linear-gradient(rgba(124, 58, 237, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(124, 58, 237, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        .hero-mesh {
+            position: fixed;
+            top: -10%; right: -5%;
+            width: 70vw; height: 70vh;
+            background: radial-gradient(circle, rgba(167, 139, 250, 0.12), transparent 70%);
+            filter: blur(120px);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* --- Header & Unified Navigation --- */
+        header {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            padding: 15px 5%;
+            background: var(--bg-glass);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .mobile-toggle { display: none; font-size: 1.5rem; cursor: pointer; color: var(--text-main); }
+
+        .mobile-nav {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            background: var(--bg-body); z-index: 2000;
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+            gap: 32px; font-weight: 800; font-size: 1.5rem;
+        }
+        .mobile-nav.active { display: flex; animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+        .close-menu { position: absolute; top: 30px; right: 40px; font-size: 2rem; cursor: pointer; }
+
+        .logo { font-size: 1.6rem; font-weight: 900; letter-spacing: -1.5px; cursor: pointer; }
+        .logo span { color: var(--primary); }
+
+        nav { display: flex; gap: 32px; font-weight: 700; font-size: 0.9rem; align-items: center; }
+        nav a { text-decoration: none; color: var(--text-muted); transition: 0.2s; }
+        nav a:hover { color: var(--primary); }
+        .nav-btn { background: var(--primary); color: white; padding: 10px 20px; border-radius: 10px; }
+
+        .theme-toggle { font-size: 1.2rem; cursor: pointer; color: var(--text-muted); padding: 5px; }
+        html.dark .theme-toggle { color: #facc15; }
+
+        /* --- Hero Section --- */
+        .hero {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 180px 5% 100px;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-info h1 {
+            font-size: 4.5rem; font-weight: 900; line-height: 1.05; letter-spacing: -3px; margin-bottom: 24px;
+        }
+        .hero-info h1 span { background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-info p { font-size: 1.3rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 40px; }
+
+        .cta-group { display: flex; gap: 20px; margin-bottom: 40px; flex-wrap: wrap; }
+        .btn-main { padding: 18px 36px; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border-radius: 14px; text-decoration: none; font-weight: 800; box-shadow: 0 10px 30px rgba(124, 58, 237, 0.4); display: flex; align-items: center; gap: 10px; transition: 0.3s; }
+        .btn-main:hover { transform: translateY(-5px); box-shadow: 0 20px 50px rgba(124, 58, 237, 0.5); }
+        .btn-ghost { padding: 18px 36px; background: var(--surface); color: var(--text-main); border: 1px solid var(--border); border-radius: 14px; text-decoration: none; font-weight: 700; transition: 0.2s; }
+
+        /* --- Carousel Section (Competencies) --- */
+        .competencies { padding: 100px 5%; background: var(--surface); position: relative; }
+        .section-tag { font-size: 0.8rem; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 2px; display: block; margin-bottom: 16px; text-align: center; }
+        .section-title { font-size: 2.8rem; font-weight: 900; text-align: center; margin-bottom: 60px; letter-spacing: -1px; }
+        /* --- Carousel Section v27.1 (Definitive Sliding) --- */
+        .carousel-wrapper {
+            position: relative;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 60px;
+            overflow: hidden;
+        }
+
+        .carousel-container {
+            overflow: visible;
+            transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .carousel-track {
+            display: flex;
+            gap: 24px;
+            width: max-content;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .comp-card {
+            width: 380px;
+            background: var(--bg-body);
+            padding: 48px;
+            border-radius: 28px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+            transition: 0.4s ease;
+            display: flex; flex-direction: column; gap: 20px;
+            flex-shrink: 0;
+        }
+        .comp-card:hover { transform: translateY(-12px); border-color: var(--primary); box-shadow: 0 20px 40px rgba(124, 58, 237, 0.15); }
+        .comp-icon { font-size: 3rem; color: var(--primary); filter: drop-shadow(0 5px 15px rgba(167, 139, 250, 0.3)); }
+        
+        .carousel-nav {
+            position: absolute; top: 50%; width: 100%; left: 0;
+            display: flex; justify-content: space-between; transform: translateY(-50%);
+            padding: 0 5px; pointer-events: none; z-index: 10;
+        }
+        .arrow-btn {
+            width: 50px; height: 50px; border-radius: 50%; border: 1px solid var(--border);
+            background: var(--bg-body); color: var(--text-main); font-size: 1.2rem;
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
+            pointer-events: auto; transition: 0.3s; box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .arrow-btn:hover { background: var(--primary); color: white; transform: scale(1.1); }
+        .arrow-btn.disabled { opacity: 0.3; cursor: not-allowed; }
+
+        /* --- Testimonials Section --- */
+        .testimonials { padding: 120px 5%; max-width: 1200px; margin: 0 auto; }
+        .testi-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 80px; align-items: center; }
+        
+        .testi-main {
+            background: linear-gradient(135deg, var(--bg-body), var(--surface));
+            padding: 60px;
+            border-radius: 32px;
+            border: 1px solid var(--border);
+            position: relative;
+        }
+        .quote-icon { position: absolute; top: 40px; left: 40px; font-size: 4rem; opacity: 0.05; color: var(--primary); }
+        .testi-text { font-size: 1.6rem; font-weight: 500; font-style: italic; margin-bottom: 30px; line-height: 1.5; }
+        .testi-author { display: flex; align-items: center; gap: 20px; }
+        .author-img { width: 64px; height: 64px; border-radius: 50%; border: 3px solid var(--primary); }
+        .author-info h4 { font-size: 1.1rem; font-weight: 800; }
+        .author-info p { color: var(--primary); font-weight: 700; font-size: 0.9rem; }
+
+        /* --- Pricing Section --- */
+        .pricing { padding: 120px 5%; background: var(--surface); }
+        .price-grid { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-top: 60px; }
+        
+        .price-card {
+            background: var(--bg-body);
+            padding: 50px;
+            border-radius: 30px;
+            border: 1px solid var(--border);
+            width: 100%;
+            max-width: 400px;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .price-card.featured { border: 2px solid var(--primary); box-shadow: 0 40px 80px rgba(124, 58, 237, 0.15); }
+        .price-card.featured::before { content: 'MELHOR VALOR'; position: absolute; top: 20px; right: -30px; background: var(--primary); color: white; padding: 5px 40px; transform: rotate(45deg); font-size: 0.7rem; font-weight: 800; }
+
+        .price-header { margin-bottom: 40px; }
+        .price-name { font-size: 1.1rem; font-weight: 800; color: var(--text-muted); margin-bottom: 10px; }
+        .price-val { font-size: 3rem; font-weight: 900; }
+        .price-val span { font-size: 1rem; color: var(--text-muted); }
+
+        .price-list { list-style: none; margin-bottom: 40px; }
+        .price-list li { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; font-weight: 600; font-size: 0.95rem; }
+        .price-list li i { color: #27c93f; }
+
+        .btn-price { width: 100%; padding: 16px; border-radius: 12px; border: none; font-weight: 800; font-size: 1.1rem; cursor: pointer; transition: 0.2s; }
+        .btn-free { background: var(--surface); color: var(--text-main); }
+        .btn-elite { background: var(--primary); color: white; }
+
+        /* --- Visual Area Overrides --- */
+        .terminal-box { 
+            background: var(--bg-glass); 
+            backdrop-filter: blur(28px); 
+            -webkit-backdrop-filter: blur(28px); 
+            border: 1px solid rgba(255,255,255,0.15); 
+            border-radius: 20px; 
+            box-shadow: 0 40px 80px rgba(0,0,0,0.3), 0 0 20px rgba(167, 139, 250, 0.1); 
+            transform: rotateY(-15deg); 
+            animation: float-box 6s infinite ease-in-out; 
+            transition: 0.3s;
+        }
+        html.dark .terminal-box { border-color: rgba(167, 139, 250, 0.3); box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 30px rgba(167, 139, 250, 0.2); }
+        .term-head { padding: 12px 20px; background: rgba(0,0,0,0.05); border-bottom: 1px solid var(--border); display: flex; gap: 8px; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; }
+        .red { background: #FF5F56; } .yel { background: #FFBD2E; } .grn { background: #27C93F; }
+        .term-body { padding: 24px; font-family: 'JetBrains Mono', monospace; font-size: 14px; min-height: 320px; }
+
+        .overlay-card {
+            position: absolute; bottom: -30px; left: -30px; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 30px 60px rgba(0,0,0,0.1); display: flex; gap: 15px; align-items: center; z-index: 100;
+        }
+        html.dark .overlay-card { background: #1e293b; color: white; }
+
+        /* --- Footer --- */
+        footer { padding: 100px 5%; border-top: 1px solid var(--border); }
+        .footer-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 60px; }
+        .footer-logo { font-size: 1.5rem; font-weight: 900; margin-bottom: 20px; }
+        .footer-col h4 { margin-bottom: 24px; font-weight: 800; font-size: 0.95rem; }
+        .footer-col p, .footer-col a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; line-height: 1.8; display: block; margin-bottom: 12px; }
+
+        @media (max-width: 1024px) {
+            .hero { grid-template-columns: 1fr; text-align: center; padding-top: 140px; padding-bottom: 60px; }
+            .hero-info h1 { font-size: 2.2rem; letter-spacing: -1.5px; }
+            
+            .carousel-wrapper { padding: 0; overflow: visible; }
+            .carousel-container { overflow-x: auto; scroll-snap-type: x mandatory; padding: 0 20px 40px; }
+            .carousel-track { transform: none !important; gap: 16px; }
+            .comp-card { min-width: 85vw; width: 85vw; scroll-snap-align: center; padding: 32px 24px; }
+            .carousel-nav { display: none; }
+
+            .price-card { max-width: 100%; }
+            .testi-grid { grid-template-columns: 1fr; }
+            nav { display: none; }
+            .mobile-toggle { display: block; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hero-mesh"></div>
+
+    <header id="navbar">
+        <div class="logo">Lab<span>Tech</span>AI</div>
+        <nav>
+            <a href="#about">O Método</a>
+            <a href="#courses">Módulos</a>
+            <a href="#testimonials">Depoimentos</a>
+            <a href="#pricing">Preços</a>
+            <div onclick="toggleTheme()" class="theme-toggle"><i id="theme-icon" class="fa-solid fa-moon"></i></div>
+            <a href="dashboard.html" class="nav-btn">Entrar área do aluno →</a>
+        </nav>
+        <div class="mobile-toggle" onclick="toggleMenu()"><i class="fa-solid fa-bars-staggered"></i></div>
+    </header>
+
+    <div class="mobile-nav" id="mobile-nav">
+        <div class="close-menu" onclick="toggleMenu()">&times;</div>
+        <a href="#about" onclick="toggleMenu()">O Método</a>
+        <a href="#courses" onclick="toggleMenu()">Módulos</a>
+        <a href="#testimonials" onclick="toggleMenu()">Depoimentos</a>
+        <a href="#pricing" onclick="toggleMenu()">Preços</a>
+        <div onclick="toggleTheme(); toggleMenu();" class="theme-toggle" style="font-size: 2rem;"><i class="fa-solid fa-moon"></i> Tema</div>
+        <a href="dashboard.html" class="nav-btn">Área do Aluno</a>
+    </div>
+
+    <section class="hero">
+        <div class="hero-info">
+            <h1>O Ecossistema de <span>Elite Tech.</span></h1>
+            <p>O primeiro laboratório gamificado de IA que transforma iniciantes em desenvolvedores disputados através de prática intensiva e mentoria real.</p>
+            <div class="cta-group">
+                <a href="dashboard.html" class="btn-main">Quero começar agora <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="#about" class="btn-ghost">Ver método</a>
+            </div>
+            <div style="font-size: 0.85rem; font-weight: 800; color: var(--text-muted); display: flex; gap: 24px; align-items: center;">
+                PRIMEIROS MÓDULOS FREE <div style="width: 4px; height: 4px; border-radius: 50%; background: var(--primary);"></div> <i class="fa-solid fa-users"></i> +2.400 ALUNOS
+            </div>
+        </div>
+
+        <div style="position: relative; perspective: 1000px;">
+            <div class="terminal-box">
+                <div class="term-head"><div class="dot red"></div><div class="dot yel"></div><div class="dot grn"></div></div>
+                <div class="term-body" id="term-typing"></div>
+            </div>
+            <div class="overlay-card">
+                <img src="https://i.pravatar.cc/150?u=alexsander" width="48" style="border-radius: 50%;">
+                <div>
+                    <div style="font-weight: 800; font-size: 0.9rem;">Alexsander S.</div>
+                    <div style="font-size: 0.75rem; color: var(--primary); font-weight: 700;">Subiu para Nível 12! <i class="fa-solid fa-sparkles"></i></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="competencies" id="about">
+        <span class="section-tag">Diferenciais</span>
+        <h2 class="section-title">Por que você vai dominar o código</h2>
+        
+        <div class="carousel-wrapper">
+            <div class="carousel-container" id="carousel">
+                <div class="carousel-track">
+                    <div class="comp-card">
+                        <i class="fa-solid fa-brain comp-icon"></i>
+                        <h3>Mentor AI 24/7</h3>
+                        <p>Nunca mais fique travado. Nossa IA entende seu código e te dá dicas sem dar a resposta pronta, acelerando sua lógica.</p>
+                    </div>
+                    <div class="comp-card">
+                        <i class="fa-solid fa-gamepad comp-icon"></i>
+                        <h3>Gamificação de Elite</h3>
+                        <p>Ganhe XP, desbloqueie conquistas épicas e conquiste seu lugar no pódio global enquanto aprende tecnologias reais.</p>
+                    </div>
+                    <div class="comp-card">
+                        <i class="fa-solid fa-code comp-icon"></i>
+                        <h3>Labs Práticos</h3>
+                        <p>Diga adeus às aulas teóricas infinitas. Aqui você constrói projetos reais e infraestrutura em nuvem desde o dia 1.</p>
+                    </div>
+                    <div class="comp-card">
+                        <i class="fa-solid fa-rocket comp-icon"></i>
+                        <h3>Foco em Conversão</h3>
+                        <p>Currículo desenhado para o mercado 2026. Foco total em stacks que pagam melhor e garantem sua empregabilidade.</p>
+                    </div>
+                    <div class="comp-card">
+                        <i class="fa-solid fa-shield-halved comp-icon"></i>
+                        <h3>Comunidade Blindada</h3>
+                        <p>Acesso exclusivo a grupos de elite onde networking e oportunidades de trabalho em startups circulam diariamente.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="carousel-nav">
+                <div class="arrow-btn" id="prevBtn" onclick="slideCarousel(-1)"><i class="fa-solid fa-arrow-left"></i></div>
+                <div class="arrow-btn" id="nextBtn" onclick="slideCarousel(1)"><i class="fa-solid fa-arrow-right"></i></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials" id="testimonials">
+        <div class="section-header" style="text-align: left; align-items: flex-start;">
+            <span class="section-tag" style="text-align: left;">Sucesso Comprovado</span>
+            <h2 class="section-title" style="text-align: left; margin-bottom: 20px;">Relatos de quem mudou de vida</h2>
+        </div>
+        
+        <div class="testi-grid">
+            <div class="testi-main">
+                <i class="fa-solid fa-quote-left quote-icon"></i>
+                <p class="testi-text">"A LabTechAI mudou meu jogo. O método de laboratórios e o sistema de ranking me mantiveram focado. Hoje, já conquistei meu espaço e trabalho como Desenvolvedor Full Stack Jr!"</p>
+                <div class="testi-author">
+                    <img src="https://i.pravatar.cc/150?u=alexsander" class="author-img">
+                    <div class="author-info">
+                        <h4>Alexsander S.</h4>
+                        <p>Dev Full Stack Jr @ TechNext</p>
+                    </div>
+                </div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 30px;">
+                <div class="card" style="padding: 30px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px;">
+                    <p style="font-weight: 500; font-size: 1.1rem; margin-bottom: 20px;">"O Mentor AI salvou minha vida várias vezes. É como ter um Sênior do seu lado o tempo todo."</p>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <img src="https://i.pravatar.cc/150?u=joao" width="40" style="border-radius: 50%;">
+                        <div style="font-size: 0.9rem; font-weight: 800;">João Silva</div>
+                    </div>
+                </div>
+                <div class="card" style="padding: 30px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px;">
+                    <p style="font-weight: 500; font-size: 1.1rem; margin-bottom: 20px;">"Entrei para os módulos Free e em uma semana assinei o Elite. Melhor investimento da carreira."</p>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <img src="https://i.pravatar.cc/150?u=maria" width="40" style="border-radius: 50%;">
+                        <div style="font-size: 0.9rem; font-weight: 800;">Maria Lima</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing" id="pricing">
+        <span class="section-tag">Acesso</span>
+        <h2 class="section-title">Escolha seu plano de evolução</h2>
+        
+        <div class="price-grid">
+            <div class="price-card">
+                <div class="price-header">
+                    <div class="price-name">START UP</div>
+                    <div class="price-val">R$ 0<span>/mês</span></div>
+                </div>
+                <ul class="price-list">
+                    <li><i class="fa-solid fa-check"></i> Primeiros 4 Módulos</li>
+                    <li><i class="fa-solid fa-check"></i> Dashboard Gamificado</li>
+                    <li><i class="fa-solid fa-check"></i> Comunidade Aberta</li>
+                    <li style="opacity: 0.4;"><i class="fa-solid fa-xmark" style="color: #64748b;"></i> Mentor AI 24/7</li>
+                    <li style="opacity: 0.4;"><i class="fa-solid fa-xmark" style="color: #64748b;"></i> Certificados de Elite</li>
+                </ul>
+                <button class="btn-price btn-free">Começar Free</button>
+            </div>
+
+            <div class="price-card featured">
+                <div class="price-header">
+                    <div class="price-name">ELITE XP</div>
+                    <div class="price-val">R$ 49<span>,90/mês</span></div>
+                </div>
+                <ul class="price-list">
+                    <li><i class="fa-solid fa-check"></i> Acesso Full Vitalício</li>
+                    <li><i class="fa-solid fa-check"></i> Mentor AI Ilimitado</li>
+                    <li><i class="fa-solid fa-check"></i> Laboratórios de Nuvem</li>
+                    <li><i class="fa-solid fa-check"></i> Ranking de Prêmios</li>
+                    <li><i class="fa-solid fa-check"></i> Networking Profissional</li>
+                </ul>
+                <button class="btn-price btn-elite" onclick="location.href='dashboard.html'">Garantir vaga Elite</button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <div class="footer-logo">Lab<span>Tech</span>AI</div>
+                <p>O futuro da educação tech é prático, gamificado e potencializado por IA.</p>
+                <div style="display: flex; gap: 20px; font-size: 1.2rem; margin-top: 20px;">
+                    <i class="fa-brands fa-instagram"></i>
+                    <i class="fa-brands fa-linkedin"></i>
+                    <i class="fa-brands fa-youtube"></i>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Plataforma</h4>
+                <a href="#">O Método</a>
+                <a href="#">Cursos</a>
+                <a href="#">Comunidade</a>
+                <a href="#">Dashboard</a>
+            </div>
+            <div class="footer-col">
+                <h4>Suporte</h4>
+                <a href="#">FAQ</a>
+                <a href="#">Termos de Uso</a>
+                <a href="#">Privacidade</a>
+                <a href="#">Contato</a>
+            </div>
+            <div class="footer-col">
+                <h4>Newsletter</h4>
+                <p>Receba dicas de código e IA toda semana.</p>
+                <div style="display: flex; gap: 10px; margin-top: 15px;">
+                    <input type="text" placeholder="Seu melhor e-mail" style="padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); outline: none;">
+                    <button style="padding: 12px; border-radius: 8px; background: var(--primary); border: none; color: white;"><i class="fa-solid fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+        <p style="text-align: center; margin-top: 80px; font-size: 0.8rem;">&copy; 2026 LabTechAI Ecosystem. Designed for Alexsander.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script>
+        // --- Mobile Menu Toggle ---
+        function toggleMenu() {
+            document.getElementById('mobile-nav').classList.toggle('active');
+        }
+
+        // --- 1. Premium Terminal Animation ---
+        const typingEl = document.getElementById('term-typing');
+        const codeLines = [
+            '<span style="color: #64748b">// Iniciando LabTechAI Pipeline...</span>',
+            '<span style="color: var(--primary)">const</span> dev = <span style="color: var(--secondary)">new</span> Developer(<span style="color: #4ade80">"Alexsander"</span>);',
+            'dev.learn(<span style="color: #A78BFA">"Full Stack Mastery"</span>);',
+            'dev.achievements.unlock(<span style="color: #facc15">"Cloud Master"</span>);',
+            '<span style="color: #4ade80">log</span>(<span style="color: #fff">"Pronto para ser disputado pelo mercado."</span>);'
+        ];
+        let lIdx = 0; let cIdx = 0;
+        function type() {
+            if (lIdx < codeLines.length) {
+                const cur = codeLines[lIdx];
+                if (cIdx < cur.length) {
+                    if (cur[cIdx] === '<') {
+                        const end = cur.indexOf('>', cIdx);
+                        typingEl.innerHTML += cur.substring(cIdx, end + 1);
+                        cIdx = end + 1;
+                    } else {
+                        typingEl.innerHTML += cur[cIdx];
+                        cIdx++;
+                    }
+                    setTimeout(type, 15);
+                } else {
+                    typingEl.innerHTML += '<br>';
+                    lIdx++; cIdx = 0;
+                    setTimeout(type, 1000);
+                }
+            } else {
+                setTimeout(() => { typingEl.innerHTML = ''; lIdx = 0; type(); }, 5000);
+            }
+        }
+        window.addEventListener('DOMContentLoaded', type);
+
+        // --- 2. Carousel v27.1 Transformation Logic ---
+        const track = document.querySelector('.carousel-track');
+        let currentPos = 0;
+        const totalCards = document.querySelectorAll('.comp-card').length;
+
+        function slideCarousel(dir) {
+            const cardWidth = document.querySelector('.comp-card').offsetWidth + 24;
+            const containerWidth = document.querySelector('.carousel-wrapper').offsetWidth;
+            const maxScroll = (totalCards * cardWidth) - containerWidth + 80;
+
+            currentPos += dir * cardWidth;
+            
+            // Boundary clamping
+            if (currentPos < 0) currentPos = 0;
+            if (currentPos > maxScroll) currentPos = maxScroll;
+
+            track.style.transform = `translateX(-${currentPos}px)`;
+            
+            // Button states
+            document.getElementById('prevBtn').style.opacity = currentPos === 0 ? '0.3' : '1';
+            document.getElementById('nextBtn').style.opacity = currentPos >= maxScroll ? '0.3' : '1';
+        }
+        // Initial state
+        document.getElementById('prevBtn').style.opacity = '0.3';
+
+        // --- 3. Dark Mode Sync ---
+        function toggleTheme() {
+            const html = document.documentElement;
+            html.classList.toggle('dark');
+            const isDark = html.classList.contains('dark');
+            localStorage.setItem('LABTECHAI_THEME', isDark ? 'dark' : 'light');
+            updateThemeIcon(isDark);
+        }
+        function updateThemeIcon(isDark) {
+            const icon = document.getElementById('theme-icon');
+            if (isDark) { icon.classList.replace('fa-moon', 'fa-sun'); } else { icon.classList.replace('fa-sun', 'fa-moon'); }
+        }
+        const savedTheme = localStorage.getItem('LABTECHAI_THEME') || 'light';
+        if (savedTheme === 'dark') { document.documentElement.classList.add('dark'); updateThemeIcon(true); }
+
+        // --- 4. Navbar Scroll Effect ---
+        window.onscroll = () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) { 
+                navbar.style.padding = '10px 5%'; 
+                navbar.style.boxShadow = '0 10px 40px rgba(0,0,0,0.05)';
+            } else { 
+                navbar.style.padding = '15px 5%'; 
+                navbar.style.boxShadow = 'none'; 
+            }
+        }
+    </script>
+</body>
+</html>
